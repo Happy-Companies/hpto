@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Homepage Takeover Ad</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      .placeholder {
+        background-color: lightgray;
+        height: 3000px;
+        width: 100vw;
+      }
+
+      .placeholder-text {
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 0;
+        padding: 36px 24px;
+      }
+
+      .ad-container {
+        width: 100vw;
+        position: relative;
+        transition: aspect-ratio 0.5s ease;
+        overflow: hidden;
+        background-color: darkgray;
+        background-size: cover;
+        background-position: center;
+      }
+
+      .ad-expanded {
+        aspect-ratio: 4/1;
+        /* Desktop expanded height */
+      }
+
+      .ad-collapsed {
+        aspect-ratio: 10/1;
+        /* Desktop collapsed height */
+      }
+
+      /* Desktop Images */
+      .ad-container.ad-expanded {
+        background-image: url("https://i.imghippo.com/files/YRt1580e.png");
+      }
+
+      .ad-container.ad-collapsed {
+        background-image: url("https://i.imghippo.com/files/Lpka8490FxA.png");
+      }
+
+      /* Mobile Images */
+      @media (max-width: 768px) {
+        .ad-expanded {
+          aspect-ratio: 16/9;
+          /* Mobile expanded height */
+        }
+
+        .ad-collapsed {
+          aspect-ratio: 650/213;
+          /* Mobile collapsed height */
+        }
+
+        .ad-container.ad-expanded {
+          background-image: url("https://i.imghippo.com/files/DYn6615Ds.png");
+        }
+
+        .ad-container.ad-collapsed {
+          background-image: url("https://i.imghippo.com/files/DYn6615Ds.png");
+        }
+      }
+
+      .ad-video-container {
+        position: absolute;
+        display: block;
+        top: 10%;
+        bottom: 10%;
+        left: 3%;
+        aspect-ratio: 16 / 9;
+        z-index: 5;
+      }
+
+      video {
+        width: auto;
+        height: 100%;
+      }
+
+      @media (max-width: 768px) {
+        .ad-video-container {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="ad-container" class="ad-container ad-expanded">
+      <!-- Video (optional) -->
+      <div class="ad-video-container">
+        <video id="ad-video" autoplay muted playsinline>
+          <source
+            src="https://cdn.airtory.com/ibv/10ce4ac3c5fffd22c12e9a8e5feb1922_Noro3197hSaddleUp30TmTvcOlvRevJP.mp4"
+            type="video/mp4"
+          />
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    </div>
+
+    <!-- TODO: remove placeholder div -->
+    <div id="placeholder" class="placeholder">
+      <p class="placeholder-text">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
+        velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
+        occaecat cupidatat non proident, sunt in culpa qui officia deserunt
+        mollit anim id est laborum.
+      </p>
+    </div>
+
+    <script>
+      const adContainer = document.getElementById("ad-container");
+      const adVideo = document.getElementById("ad-video");
+
+      // Collapse ad on scroll
+      window.addEventListener("scroll", () => {
+        if (adContainer.classList.contains("ad-expanded") && scrollY > 20) {
+          adContainer.classList.remove("ad-expanded");
+          adContainer.classList.add("ad-collapsed");
+        }
+      });
+
+      // Collapse ad when video ends
+      adVideo.addEventListener("ended", () => {
+        adContainer.classList.remove("ad-expanded");
+        adContainer.classList.add("ad-collapsed");
+      });
+    </script>
+  </body>
+</html>

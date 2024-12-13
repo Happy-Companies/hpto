@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Homepage Takeover Ad</title>
+    <title>POWER Homepage Takeover Ad</title>
     <style>
       body {
         margin: 0;
@@ -14,12 +14,6 @@
         background-color: lightgray;
         height: 3000px;
         width: 100vw;
-      }
-
-      .placeholder-text {
-        font-family: Arial, Helvetica, sans-serif;
-        margin: 0;
-        padding: 36px 24px;
       }
 
       .ad-container {
@@ -44,7 +38,7 @@
 
       /* Desktop Images */
       .ad-container.ad-expanded {
-        background-image: url("https://i.imghippo.com/files/YRt1580e.png");
+        background-image: url("https://i.ibb.co/QvmLPzH/desktop-expanded-left.png");
       }
 
       .ad-container.ad-collapsed {
@@ -77,9 +71,16 @@
         display: block;
         top: 10%;
         bottom: 10%;
-        left: 3%;
         aspect-ratio: 16 / 9;
         z-index: 5;
+      }
+
+      .ad-left {
+        left: 2%;
+      }
+
+      .ad-right {
+        right: 2%;
       }
 
       video {
@@ -97,9 +98,9 @@
 
   <body>
     <div id="ad-container" class="ad-container ad-expanded">
-      <!-- Video (optional) -->
-      <div class="ad-video-container">
-        <video id="ad-video" autoplay muted playsinline>
+      <!-- Video Left (optional) -->
+      <div class="ad-video-container ad-left">
+        <video id="ad-video" autoplay muted playsinline controls>
           <source
             src="https://cdn.airtory.com/ibv/10ce4ac3c5fffd22c12e9a8e5feb1922_Noro3197hSaddleUp30TmTvcOlvRevJP.mp4"
             type="video/mp4"
@@ -107,20 +108,18 @@
           Your browser does not support the video tag.
         </video>
       </div>
+
+      <!-- Video Right (optional) -->
+      <div class="ad-video-container ad-right">
+        <video id="ad-video" autoplay muted playsinline>
+          <source src="" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      </div>
     </div>
 
     <!-- TODO: remove placeholder div -->
-    <div id="placeholder" class="placeholder">
-      <p class="placeholder-text">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-        velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-        occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-        mollit anim id est laborum.
-      </p>
-    </div>
+    <div id="placeholder" class="placeholder"></div>
 
     <script>
       const adContainer = document.getElementById("ad-container");

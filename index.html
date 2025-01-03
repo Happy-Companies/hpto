@@ -130,7 +130,12 @@
     </style>
   </head>
   <body>
-    <a href="https://www.mazda.com/" target="_blank">
+    <a href="#" target="_blank" id="ad-link">
+      <img
+        src="https://third-party-tracker.com/impression?adId=[%AdId%]"
+        alt="Impression Tracker"
+        style="display: none"
+      />
       <div id="ad-container" class="ad-container ad-expanded">
         <!-- Video Left (optional) -->
         <div
@@ -156,6 +161,22 @@
     </div>
 
     <script>
+      // Handle ad click
+      document
+        .getElementById("ad-link")
+        .addEventListener("click", function (event) {
+          event.preventDefault();
+
+          // Track the click with a separate click tracker URL
+          const clickTracker = new Image();
+          clickTracker.src = "https://www.google.com";
+
+          // Once the click tracker is fired, navigate to the click-through URL
+          setTimeout(function () {
+            window.open("https://www.mazda.com/en/", "_blank");
+          }, 100); // Give the tracker some time to fire before redirecting
+        });
+
       const adContainer = document.getElementById("ad-container");
       const adVideoContainerLeft = document.getElementById(
         "ad-video-container-left"

@@ -213,14 +213,13 @@
       }
 
       const youtubeVideoId = "hl8joe2458Q";
-      const hasLeftVideo = true;
-      const hasRightVideo = false;
+      const videoSide = "left"; // "left" or "right" or "" for no video
 
       // YouTube API callback
       function onYouTubeIframeAPIReady() {
-        if (hasLeftVideo)
+        if (videoSide == "left")
           initializeYouTubePlayer("player-left", youtubeVideoId);
-        if (hasRightVideo)
+        if (videoSide == "right")
           initializeYouTubePlayer("player-right", youtubeVideoId);
       }
 

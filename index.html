@@ -95,33 +95,65 @@
           background-image: url("https://i.imghippo.com/files/DYn6615Ds.png");
         }
 
-        .ad-video-container {
+        .ad-video-container-expanded {
+          top: 0;
+          bottom: 0;
+        }
+
+        .ad-video-container-collapsed {
+          top: 0;
+          bottom: 0;
+        }
+
+        .ad-left-expanded {
+          left: 0;
+          right: 0;
+        }
+
+        .ad-left-collapsed {
+          left: 0;
+          right: 0;
+          display: none;
+        }
+
+        .ad-right-expanded {
+          left: 0;
+          right: 0;
+        }
+
+        .ad-right-collapsed {
+          left: 0;
+          right: 0;
           display: none;
         }
       }
     </style>
   </head>
   <body>
-    <div id="ad-container" class="ad-container ad-expanded">
-      <!-- Video Left (optional) -->
-      <div
-        id="ad-video-container-left"
-        class="ad-video-container ad-video-container-expanded ad-left-expanded"
-      >
-        <div id="player-left"></div>
-      </div>
+    <a href="https://www.mazda.com/" target="_blank">
+      <div id="ad-container" class="ad-container ad-expanded">
+        <!-- Video Left (optional) -->
+        <div
+          id="ad-video-container-left"
+          class="ad-video-container ad-video-container-expanded ad-left-expanded"
+        >
+          <div id="player-left"></div>
+        </div>
 
-      <!-- Video Right (optional) -->
-      <div
-        id="ad-video-container-right"
-        class="ad-video-container ad-video-container-expanded ad-right-expanded"
-      >
-        <div id="player-right"></div>
+        <!-- Video Right (optional) -->
+        <div
+          id="ad-video-container-right"
+          class="ad-video-container ad-video-container-expanded ad-right-expanded"
+        >
+          <div id="player-right"></div>
+        </div>
       </div>
-    </div>
+    </a>
 
     <!-- Placeholder for testing -->
-    <div id="placeholder" class="placeholder"></div>
+    <div id="placeholder" class="placeholder">
+      <h1 style="margin: 0">Top of content</h1>
+    </div>
 
     <script>
       const adContainer = document.getElementById("ad-container");

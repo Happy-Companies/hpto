@@ -6,7 +6,7 @@
     <title>POWER Homepage Takeover Ad</title>
     <style>
       :root {
-        --ad-spacing: 28px;
+        --ad-spacing: 24px;
       }
 
       body {
@@ -48,18 +48,34 @@
 
       .ad-video-container {
         position: absolute;
-        top: var(--ad-spacing);
-        bottom: var(--ad-spacing);
         aspect-ratio: 16 / 9;
         z-index: 5;
       }
 
-      .ad-left {
+      .ad-video-container-expanded {
+        top: var(--ad-spacing);
+        bottom: var(--ad-spacing);
+      }
+
+      .ad-video-container-collapsed {
+        top: 0;
+        bottom: 0;
+      }
+
+      .ad-left-expanded {
         left: var(--ad-spacing);
       }
 
-      .ad-right {
+      .ad-left-collapsed {
+        left: 0;
+      }
+
+      .ad-right-expanded {
         right: var(--ad-spacing);
+      }
+
+      .ad-right-collapsed {
+        right: 0;
       }
 
       @media (max-width: 768px) {
@@ -88,12 +104,18 @@
   <body>
     <div id="ad-container" class="ad-container ad-expanded">
       <!-- Video Left (optional) -->
-      <div class="ad-video-container ad-left">
+      <div
+        id="ad-video-container-left"
+        class="ad-video-container ad-video-container-expanded ad-left-expanded"
+      >
         <div id="player-left"></div>
       </div>
 
       <!-- Video Right (optional) -->
-      <div class="ad-video-container ad-right">
+      <div
+        id="ad-video-container-right"
+        class="ad-video-container ad-video-container-expanded ad-right-expanded"
+      >
         <div id="player-right"></div>
       </div>
     </div>
@@ -103,11 +125,25 @@
 
     <script>
       const adContainer = document.getElementById("ad-container");
+      const adVideoContainerLeft = document.getElementById(
+        "ad-video-container-left"
+      );
+      const adVideoContainerRight = document.getElementById(
+        "ad-video-container-right"
+      );
 
       // Handles collapsing the ad
       function collapseAd() {
         adContainer.classList.remove("ad-expanded");
         adContainer.classList.add("ad-collapsed");
+        adVideoContainerLeft.classList.remove("ad-left-expanded");
+        adVideoContainerLeft.classList.add("ad-left-collapsed");
+        adVideoContainerLeft.classList.remove("ad-video-container-expanded");
+        adVideoContainerLeft.classList.add("ad-video-container-collapsed");
+        adVideoContainerRight.classList.remove("ad-right-expanded");
+        adVideoContainerRight.classList.add("ad-right-collapsed");
+        adVideoContainerRight.classList.remove("ad-video-container-expanded");
+        adVideoContainerRight.classList.add("ad-video-container-collapsed");
       }
 
       // Handles scroll event
@@ -132,11 +168,13 @@
             controls: 1,
             rel: 0,
             fs: 0,
+            loop: 1,
+            playlist: videoId,
           },
           events: {
             onReady: (event) => event.target.playVideo(),
             onStateChange: (event) => {
-              if (event.data === YT.PlayerState.ENDED) collapseAd();
+              if (event.data === -1) collapseAd();
             },
           },
         });

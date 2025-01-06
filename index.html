@@ -195,22 +195,6 @@
         <div id="player-left" class="video-wrapper"></div>
         <div id="clickable-video-left"></div>
         <div class="video-controls-left">
-          <button class="control-button" id="play-pause-left">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="2"
-              stroke="currentColor"
-              class="size-6"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M15.75 5.25v13.5m-7.5-13.5v13.5"
-              />
-            </svg>
-          </button>
           <button class="control-button" id="mute-unmute-left">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -238,22 +222,6 @@
         <div id="player-right" class="video-wrapper"></div>
         <div id="clickable-video-right"></div>
         <div class="video-controls-right">
-          <button class="control-button" id="play-pause-right">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="2"
-              stroke="currentColor"
-              class="size-6"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M15.75 5.25v13.5m-7.5-13.5v13.5"
-              />
-            </svg>
-          </button>
           <button class="control-button" id="mute-unmute-right">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -308,9 +276,7 @@
       const adVideoContainerRight = document.getElementById(
         "ad-video-container-right"
       )
-      const playPauseLeftButton = document.getElementById("play-pause-left")
       const muteUnmuteLeftButton = document.getElementById("mute-unmute-left")
-      const playPauseRightButton = document.getElementById("play-pause-right")
       const muteUnmuteRightButton = document.getElementById("mute-unmute-right")
 
       // Handles collapsing the ad
@@ -344,6 +310,7 @@
           width: "100%",
           videoId,
           playerVars: {
+            enablejsapi: 1,
             autoplay: 1,
             mute: 1,
             controls: 0,
@@ -351,6 +318,7 @@
             fs: 0,
             loop: 1,
             playlist: videoId,
+            disablekb: 1,
           },
           events: {
             onReady: (event) => event.target.playVideo(),
@@ -405,24 +373,12 @@
       if (videoSide === "left") {
         adVideoContainerRight.remove()
         document
-          .getElementById("play-pause-left")
-          .addEventListener("click", function () {
-            togglePlay(playerLeft, playPauseLeftButton)
-          })
-
-        document
           .getElementById("mute-unmute-left")
           .addEventListener("click", function () {
             toggleMute(playerLeft, muteUnmuteLeftButton)
           })
       } else {
         adVideoContainerLeft.remove()
-        document
-          .getElementById("play-pause-right")
-          .addEventListener("click", function () {
-            togglePlay(playerRight, playPauseRightButton)
-          })
-
         document
           .getElementById("mute-unmute-right")
           .addEventListener("click", function () {

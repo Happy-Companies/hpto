@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YouTube POWER Homepage Takeover</title>
+    <style>
+      :root {
+        --ad-spacing: 24px;
+      }
+
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      .placeholder {
+        background-color: lightgray;
+        height: 3000px;
+        width: 100vw;
+      }
+
+      .ad-container {
+        width: 100vw;
+        position: relative;
+        transition: aspect-ratio 0.5s ease;
+        overflow: hidden;
+        background-color: black;
+        background-size: cover;
+        background-position: center;
+      }
+
+      .ad-expanded {
+        aspect-ratio: 4 / 1;
+      }
+
+      .ad-collapsed {
+        aspect-ratio: 10 / 1;
+      }
+
+      .ad-container.ad-expanded {
+        background-image: url("https://i.ibb.co/QvmLPzH/desktop-expanded-left.png");
+      }
+
+      .ad-container.ad-collapsed {
+        background-image: url("https://i.imghippo.com/files/Lpka8490FxA.png");
+      }
+
+      .ad-video-container {
+        position: absolute;
+        aspect-ratio: 16 / 9;
+        z-index: 5;
+      }
+      .ad-video-container-expanded {
+        top: var(--ad-spacing);
+        bottom: var(--ad-spacing);
+      }
+
+      .ad-video-container-collapsed {
+        top: 0;
+        bottom: 0;
+      }
+
+      .ad-left-expanded {
+        left: var(--ad-spacing);
+      }
+
+      .ad-left-collapsed {
+        left: 0;
+      }
+
+      .ad-right-expanded {
+        right: var(--ad-spacing);
+      }
+
+      .ad-right-collapsed {
+        right: 0;
+      }
+
+      .video-wrapper {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+      }
+
+      .video-controls-left,
+      .video-controls-right {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        gap: 16px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 100;
+      }
+
+      #ad-video-container-left:hover .video-controls-left {
+        opacity: 1;
+      }
+
+      #ad-video-container-right:hover .video-controls-right {
+        opacity: 1;
+      }
+
+      .control-button {
+        background-color: rgba(0, 0, 0, 0.7);
+        color: white;
+        border: none;
+        border-radius: 100px;
+        padding: 12px;
+        cursor: pointer;
+        font-size: 16px;
+        width: 48px;
+        height: 48px;
+      }
+
+      .ad-clickable,
+      #clickable-video-left {
+        cursor: pointer;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1; /* Ensure this is below the video player */
+      }
+
+      @media (max-width: 768px) {
+        .ad-expanded {
+          aspect-ratio: 16 / 9;
+        }
+
+        .ad-collapsed {
+          aspect-ratio: 650 / 213;
+        }
+
+        .ad-container.ad-expanded {
+          background-image: url("https://i.imghippo.com/files/DYn6615Ds.png");
+        }
+
+        .ad-container.ad-collapsed {
+          background-image: url("https://i.imghippo.com/files/DYn6615Ds.png");
+        }
+
+        .ad-video-container-expanded {
+          top: 0;
+          bottom: 0;
+        }
+
+        .ad-video-container-collapsed {
+          top: 0;
+          bottom: 0;
+        }
+
+        .ad-left-expanded {
+          left: 0;
+          right: 0;
+        }
+
+        .ad-left-collapsed {
+          left: 0;
+          right: 0;
+          display: none;
+        }
+
+        .ad-right-expanded {
+          left: 0;
+          right: 0;
+        }
+
+        .ad-right-collapsed {
+          left: 0;
+          right: 0;
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <img
+      src="https://third-party-tracker.com/impression?adId=[%AdId%]"
+      alt="Impression Tracker"
+      style="display: none"
+    />
+    <div id="ad-container" class="ad-container ad-expanded">
+      <div id="ad-clickable" class="ad-clickable"></div>
+      <!-- Video Left (optional) -->
+      <div
+        id="ad-video-container-left"
+        class="ad-video-container ad-video-container-expanded ad-left-expanded"
+      >
+        <div id="player-left" class="video-wrapper"></div>
+        <div id="clickable-video-left"></div>
+        <div class="video-controls-left">
+          <button class="control-button" id="mute-unmute-left">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+              class="size-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.009 9.009 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Video Right (optional) -->
+      <div
+        id="ad-video-container-right"
+        class="ad-video-container ad-video-container-expanded ad-right-expanded"
+      >
+        <div id="player-right" class="video-wrapper"></div>
+        <div id="clickable-video-right"></div>
+        <div class="video-controls-right">
+          <button class="control-button" id="mute-unmute-right">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+              class="size-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.009 9.009 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Placeholder for testing -->
+    <div id="placeholder" class="placeholder">
+      <h1 style="margin: 0">Top of content</h1>
+    </div>
+
+    <script>
+      // Handle ad click
+      const adClickable = document.getElementById("ad-clickable");
+      const adPlayerLeft = document.getElementById("clickable-video-left");
+      const adPlayerRight = document.getElementById("clickable-video-right");
+
+      const clickEvent = (event) => {
+        event.stopPropagation();
+        // Track the click
+        const clickTracker = new Image();
+        clickTracker.src = "https://www.google.com";
+
+        // Navigate to the destination
+        setTimeout(() => {
+          window.open("https://www.mazda.com/en/", "_blank");
+        }, 100);
+      };
+
+      adClickable.addEventListener("click", clickEvent);
+      adPlayerLeft.addEventListener("click", clickEvent);
+      adPlayerRight.addEventListener("click", clickEvent);
+
+      const adContainer = document.getElementById("ad-container");
+      const adVideoContainerLeft = document.getElementById(
+        "ad-video-container-left"
+      );
+      const adVideoContainerRight = document.getElementById(
+        "ad-video-container-right"
+      );
+      const muteUnmuteLeftButton = document.getElementById("mute-unmute-left");
+      const muteUnmuteRightButton =
+        document.getElementById("mute-unmute-right");
+
+      // Handles collapsing the ad
+      function collapseAd() {
+        adContainer.classList.remove("ad-expanded");
+        adContainer.classList.add("ad-collapsed");
+        adVideoContainerLeft.classList.remove("ad-left-expanded");
+        adVideoContainerLeft.classList.add("ad-left-collapsed");
+        adVideoContainerLeft.classList.remove("ad-video-container-expanded");
+        adVideoContainerLeft.classList.add("ad-video-container-collapsed");
+        adVideoContainerRight.classList.remove("ad-right-expanded");
+        adVideoContainerRight.classList.add("ad-right-collapsed");
+        adVideoContainerRight.classList.remove("ad-video-container-expanded");
+        adVideoContainerRight.classList.add("ad-video-container-collapsed");
+      }
+
+      // Handles scroll event
+      function handleScroll() {
+        if (
+          adContainer.classList.contains("ad-expanded") &&
+          window.scrollY > 20
+        ) {
+          collapseAd();
+        }
+      }
+
+      // Initializes YouTube players
+      function initializeYouTubePlayer(playerName, videoId) {
+        return new YT.Player(playerName, {
+          height: "100%",
+          width: "100%",
+          videoId,
+          playerVars: {
+            enablejsapi: 1,
+            autoplay: 1,
+            mute: 1,
+            controls: 0,
+            rel: 0,
+            fs: 0,
+            loop: 1,
+            playlist: videoId,
+            disablekb: 1,
+          },
+          events: {
+            onReady: (event) => event.target.playVideo(),
+            onStateChange: (event) => {
+              if (event.data === -1) collapseAd();
+            },
+          },
+        });
+      }
+
+      // this fuction toggles the mute state of the video
+      function toggleMute(player, button) {
+        if (player.isMuted()) {
+          player.unMute();
+          button.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 9.75 19.5 12m0 0 2.25 2.25M19.5 12l2.25-2.25M19.5 12l-2.25 2.25m-10.5-6 4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.009 9.009 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" />
+            </svg>
+          `;
+        } else {
+          player.mute();
+          button.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.009 9.009 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" />
+            </svg>
+          `;
+        }
+      }
+
+      // this function toggles the play/pause state of the video
+      function togglePlay(player, button) {
+        if (player.getPlayerState() === 1) {
+          player.pauseVideo();
+          button.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" />
+            </svg>
+          `;
+        } else {
+          player.playVideo();
+          button.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 4.5v15m12-15v15" />
+            </svg>
+          `;
+        }
+      }
+
+      const youtubeVideoId = "ha83d2CKATA";
+      const videoSide = "left"; // "left" or "right" or "" for no video
+
+      if (videoSide === "left") {
+        adVideoContainerRight.remove();
+        document
+          .getElementById("mute-unmute-left")
+          .addEventListener("click", function () {
+            toggleMute(playerLeft, muteUnmuteLeftButton);
+          });
+      } else {
+        adVideoContainerLeft.remove();
+        document
+          .getElementById("mute-unmute-right")
+          .addEventListener("click", function () {
+            toggleMute(playerRight, muteUnmuteRightButton);
+            this.textContent = playerRight.isMuted() ? "Mute" : "Unmute";
+          });
+      }
+
+      let playerLeft, playerRight;
+
+      function onYouTubeIframeAPIReady() {
+        if (videoSide === "left") {
+          playerLeft = initializeYouTubePlayer("player-left", youtubeVideoId);
+        }
+        if (videoSide === "right") {
+          playerRight = initializeYouTubePlayer("player-right", youtubeVideoId);
+        }
+      }
+
+      // Attach event listeners
+      window.addEventListener("scroll", handleScroll);
+
+      // Load YouTube API script
+      const tag = document.createElement("script");
+      tag.src = "https://www.youtube.com/iframe_api";
+      const firstScriptTag = document.getElementsByTagName("script")[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+      tag.onload = onYouTubeIframeAPIReady;
+    </script>
+  </body>
+</html>

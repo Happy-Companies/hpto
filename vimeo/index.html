@@ -6,7 +6,9 @@
     <title>Vimeo POWER Homepage Takeover</title>
     <style>
       :root {
-        --ad-spacing: 24px;
+        --ad-spacing-y: 7%;
+        --ad-spacing-x: 1.75%;
+        --ad-spacing-x-mobile: 2.5%;
       }
       body {
         margin: 0;
@@ -45,21 +47,21 @@
         z-index: 5;
       }
       .ad-video-container-expanded {
-        top: var(--ad-spacing);
-        bottom: var(--ad-spacing);
+        top: var(--ad-spacing-y);
+        bottom: var(--ad-spacing-y);
       }
       .ad-video-container-collapsed {
         top: 0;
         bottom: 0;
       }
       .ad-left-expanded {
-        left: var(--ad-spacing);
+        left: var(--ad-spacing-x);
       }
       .ad-left-collapsed {
         left: 0;
       }
       .ad-right-expanded {
-        right: var(--ad-spacing);
+        right: var(--ad-spacing-x);
       }
       .ad-right-collapsed {
         right: 0;
@@ -85,6 +87,12 @@
         opacity: 1;
       }
       #ad-video-container-right:hover .video-controls-right {
+        opacity: 1;
+      }
+      .ad-left-collapsed .video-controls-left {
+        opacity: 1;
+      }
+      .ad-right-collapsed .video-controls-right {
         opacity: 1;
       }
       .control-button {
@@ -135,26 +143,22 @@
           bottom: 0;
         }
         .ad-video-container-collapsed {
-          top: 0;
-          bottom: 0;
+          top: var(--ad-spacing-y);
+          bottom: var(--ad-spacing-y);
         }
         .ad-left-expanded {
           left: 0;
           right: 0;
         }
         .ad-left-collapsed {
-          left: 0;
-          right: 0;
-          display: none;
+          left: var(--ad-spacing-x-mobile);
         }
         .ad-right-expanded {
           left: 0;
           right: 0;
         }
         .ad-right-collapsed {
-          left: 0;
-          right: 0;
-          display: none;
+          right: var(--ad-spacing-x-mobile);
         }
       }
     </style>

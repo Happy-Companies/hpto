@@ -309,6 +309,23 @@
         adVideoContainerRight.classList.add("ad-right-collapsed");
         adVideoContainerRight.classList.remove("ad-video-container-expanded");
         adVideoContainerRight.classList.add("ad-video-container-collapsed");
+      }
+
+      // Handles expanding the ad
+      function expandAd() {
+        adContainer.classList.remove("ad-collapsed");
+        adContainer.classList.add("ad-expanded");
+        adVideoContainerLeft.classList.remove("ad-left-collapsed");
+        adVideoContainerLeft.classList.add("ad-left-expanded");
+        adVideoContainerLeft.classList.remove("ad-video-container-collapsed");
+        adVideoContainerLeft.classList.add("ad-video-container-expanded");
+        adVideoContainerRight.classList.remove("ad-right-collapsed");
+        adVideoContainerRight.classList.add("ad-right-expanded");
+        adVideoContainerRight.classList.remove("ad-video-container-collapsed");
+        adVideoContainerRight.classList.add("ad-video-container-expanded");
+      }
+
+      function changePauseToReplay() {
         playPauseLeftButton.innerHTML = `
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
             <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
@@ -355,7 +372,9 @@
       // this function toggles the play/pause state of the video
       async function togglePlay(player, button) {
         let isPaused;
+        let isEnded;
         await player.getPaused().then((paused) => (isPaused = paused));
+        await player.getEnded().then((ended) => (isEnded = ended));
         if (!isPaused) {
           player.pause();
           button.innerHTML = `
@@ -364,6 +383,7 @@
             </svg>
           `;
         } else {
+          if (isEnded) expandAd();
           player.play();
           button.innerHTML = `
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-6">
@@ -402,6 +422,7 @@
             });
           playerLeft.on("ended", function () {
             collapseAd();
+            changePauseToReplay();
           });
         }
         if (videoSide === "right") {
@@ -417,6 +438,7 @@
             });
           playerRight.on("ended", function () {
             collapseAd();
+            changePauseToReplay();
           });
         }
       }

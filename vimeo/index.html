@@ -161,7 +161,8 @@
   </head>
   <body>
     <img
-      src="https://third-party-tracker.com/impression?adId=[%AdId%]"
+      id="impression-tracker"
+      src=""
       alt="Impression Tracker"
       style="display: none"
     />
@@ -266,17 +267,27 @@
       const adPlayerRight = document.getElementById("clickable-video-right");
 
       const vimeoVideoId = "981653811";
-      const videoSide = "right"; // "left" or "right" or "" for no video
+      const videoSide = "left"; // "left" or "right" or "" for no video
+      const clickThroughUrl = "https://www.mustangweek.com";
+      const impressionTrackerUrl = "https://third-party-tracker.com";
+      const clickTrackerUrl = "https://www.google.com";
+
+      // Load impression tracker
+      document.addEventListener("DOMContentLoaded", () => {
+        const trackerImg = document.getElementById("impression-tracker");
+        if (trackerImg && impressionTrackerUrl)
+          trackerImg.src = impressionTrackerUrl;
+      });
 
       const clickEvent = (event) => {
         event.stopPropagation();
         // Track the click
         const clickTracker = new Image();
-        clickTracker.src = "https://www.google.com";
+        clickTracker.src = clickTrackerUrl;
 
         // Navigate to the destination
         setTimeout(() => {
-          window.open("https://www.mustangweek.com", "_blank");
+          window.open(clickThroughUrl, "_blank");
         }, 100);
       };
 
@@ -455,7 +466,8 @@
           .addEventListener("click", function () {
             toggleMute(playerLeft, muteUnmuteLeftButton);
           });
-      } else {
+      }
+      if (videoSide === "right") {
         adVideoContainerLeft.remove();
         document
           .getElementById("play-pause-right")
@@ -467,6 +479,10 @@
           .addEventListener("click", function () {
             toggleMute(playerRight, muteUnmuteRightButton);
           });
+      }
+      if (!videoSide) {
+        adVideoContainerLeft.remove();
+        adVideoContainerRight.remove();
       }
 
       // Attach event listeners

@@ -29,6 +29,10 @@
         background-size: cover;
         background-position: center;
         cursor: pointer;
+        max-width: 100vw;
+        overflow: hidden;
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
       }
       .ad-expanded {
         aspect-ratio: 4 / 1;
@@ -266,7 +270,6 @@
     </div>
 
     <script>
-      // Handle ad click
       const adClickable = document.getElementById("ad-clickable");
       const adPlayerLeft = document.getElementById("clickable-video-left");
       const adPlayerRight = document.getElementById("clickable-video-right");
@@ -277,28 +280,16 @@
       const impressionTrackerUrl = "https://third-party-tracker.com";
       const clickTrackerUrl = "https://www.google.com";
 
-      // Load impression tracker
-      document.addEventListener("DOMContentLoaded", () => {
-        const trackerImg = document.getElementById("impression-tracker");
-        if (trackerImg && impressionTrackerUrl)
-          trackerImg.src = impressionTrackerUrl;
-      });
-
       const clickEvent = (event) => {
         event.stopPropagation();
-        // Track the click
+
         const clickTracker = new Image();
         clickTracker.src = clickTrackerUrl;
 
-        // Navigate to the destination
         setTimeout(() => {
           window.open(clickThroughUrl, "_blank");
         }, 100);
       };
-
-      adClickable.addEventListener("click", clickEvent);
-      adPlayerLeft.addEventListener("click", clickEvent);
-      adPlayerRight.addEventListener("click", clickEvent);
 
       const adContainer = document.getElementById("ad-container");
       const adVideoContainerLeft = document.getElementById(
@@ -313,7 +304,6 @@
       const muteUnmuteRightButton =
         document.getElementById("mute-unmute-right");
 
-      // Handles collapsing the ad
       function collapseAd() {
         adContainer.classList.remove("ad-expanded");
         adContainer.classList.add("ad-collapsed");
@@ -327,7 +317,6 @@
         adVideoContainerRight.classList.add("ad-video-container-collapsed");
       }
 
-      // Handles expanding the ad
       function expandAd() {
         adContainer.classList.remove("ad-collapsed");
         adContainer.classList.add("ad-expanded");
@@ -354,17 +343,6 @@
         `;
       }
 
-      // Handles scroll event
-      function handleScroll() {
-        if (
-          adContainer.classList.contains("ad-expanded") &&
-          window.scrollY > 20
-        ) {
-          collapseAd();
-        }
-      }
-
-      // this fuction toggles the mute state of the video
       async function toggleMute(player, button) {
         let isMuted;
         await player.getVolume().then((volume) => (isMuted = volume === 0));
@@ -385,7 +363,6 @@
         }
       }
 
-      // this function toggles the play/pause state of the video
       async function togglePlay(player, button) {
         let isPaused;
         let isEnded;
@@ -422,20 +399,16 @@
         background: true,
         responsive: true,
         thumbnail: true,
+        scale: true,
       };
 
       function onVimeoAPIReady() {
         if (videoSide === "left") {
           playerLeft = new Vimeo.Player("player-left", options);
           playerLeft.setVolume(0);
-          playerLeft
-            .play()
-            .then(() => {
-              console.log("Player left is playing with controls.");
-            })
-            .catch((error) => {
-              console.error("Error playing player left:", error);
-            });
+          playerLeft.play().catch((error) => {
+            console.error("Error playing player left:", error);
+          });
           playerLeft.on("ended", function () {
             collapseAd();
             changePauseToReplay();
@@ -444,14 +417,9 @@
         if (videoSide === "right") {
           playerRight = new Vimeo.Player("player-right", options);
           playerRight.setVolume(0);
-          playerRight
-            .play()
-            .then(() => {
-              console.log("Player right is playing with controls.");
-            })
-            .catch((error) => {
-              console.error("Error playing player right:", error);
-            });
+          playerRight.play().catch((error) => {
+            console.error("Error playing player right:", error);
+          });
           playerRight.on("ended", function () {
             collapseAd();
             changePauseToReplay();
@@ -459,41 +427,84 @@
         }
       }
 
-      if (videoSide === "left") {
-        adVideoContainerRight.remove();
-        document
-          .getElementById("play-pause-left")
-          .addEventListener("click", function () {
-            togglePlay(playerLeft, playPauseLeftButton);
+      function setupIntersectionObserver() {
+        const adContainer = document.getElementById("ad-container");
+
+        const options = {
+          root: null,
+          rootMargin: "0px",
+          threshold: [
+            0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6,
+            0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0,
+          ],
+        };
+
+        const handleIntersection = (entries) => {
+          entries.forEach((entry) => {
+            if (
+              entry.intersectionRatio &&
+              entry.intersectionRatio < 0.8 &&
+              adContainer.classList.contains("ad-expanded")
+            ) {
+              collapseAd();
+            }
           });
-        document
-          .getElementById("mute-unmute-left")
-          .addEventListener("click", function () {
-            toggleMute(playerLeft, muteUnmuteLeftButton);
-          });
-      }
-      if (videoSide === "right") {
-        adVideoContainerLeft.remove();
-        document
-          .getElementById("play-pause-right")
-          .addEventListener("click", function () {
-            togglePlay(playerRight, playPauseRightButton);
-          });
-        document
-          .getElementById("mute-unmute-right")
-          .addEventListener("click", function () {
-            toggleMute(playerRight, muteUnmuteRightButton);
-          });
-      }
-      if (!videoSide) {
-        adVideoContainerLeft.remove();
-        adVideoContainerRight.remove();
+        };
+
+        try {
+          const observer = new IntersectionObserver(
+            handleIntersection,
+            options
+          );
+          observer.observe(adContainer);
+        } catch (error) {
+          console.error("Error setting up IntersectionObserver:", error);
+        }
       }
 
-      // Attach event listeners
-      window.addEventListener("scroll", handleScroll);
+      document.addEventListener("DOMContentLoaded", () => {
+        const trackerImg = document.getElementById("impression-tracker");
+        if (trackerImg && impressionTrackerUrl)
+          trackerImg.src = impressionTrackerUrl;
 
-      // Load Vimeo API script
+        setupIntersectionObserver();
+
+        adClickable.addEventListener("click", clickEvent);
+        adPlayerLeft.addEventListener("click", clickEvent);
+        adPlayerRight.addEventListener("click", clickEvent);
+
+        if (videoSide === "left") {
+          adVideoContainerRight.remove();
+          document
+            .getElementById("play-pause-left")
+            .addEventListener("click", function () {
+              togglePlay(playerLeft, playPauseLeftButton);
+            });
+          document
+            .getElementById("mute-unmute-left")
+            .addEventListener("click", function () {
+              toggleMute(playerLeft, muteUnmuteLeftButton);
+            });
+        }
+        if (videoSide === "right") {
+          adVideoContainerLeft.remove();
+          document
+            .getElementById("play-pause-right")
+            .addEventListener("click", function () {
+              togglePlay(playerRight, playPauseRightButton);
+            });
+          document
+            .getElementById("mute-unmute-right")
+            .addEventListener("click", function () {
+              toggleMute(playerRight, muteUnmuteRightButton);
+            });
+        }
+        if (!videoSide) {
+          adVideoContainerLeft.remove();
+          adVideoContainerRight.remove();
+        }
+      });
+
       const tag = document.createElement("script");
       tag.src = "https://player.vimeo.com/api/player.js";
       const firstScriptTag = document.getElementsByTagName("script")[0];

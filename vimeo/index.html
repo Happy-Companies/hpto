@@ -118,7 +118,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        z-index: 1; /* Ensure this is below the video player */
+        z-index: 1;
       }
       .ad-clickable,
       #clickable-video-right {
@@ -127,10 +127,10 @@
         left: 0;
         right: 0;
         bottom: 0;
-        z-index: 1; /* Ensure this is below the video player */
+        z-index: 1;
       }
 
-      @media (max-width: 768px) {
+      @media (max-width: 767px) {
         .ad-expanded {
           aspect-ratio: 16 / 9;
         }
@@ -304,7 +304,10 @@
       const muteUnmuteRightButton =
         document.getElementById("mute-unmute-right");
 
+      const isCollapsed = sessionStorage.getItem("hptoAdCollapsed") === "true";
+
       function collapseAd() {
+        sessionStorage.setItem("hptoAdCollapsed", "true");
         adContainer.classList.remove("ad-expanded");
         adContainer.classList.add("ad-collapsed");
         adVideoContainerLeft.classList.remove("ad-left-expanded");
@@ -318,6 +321,7 @@
       }
 
       function expandAd() {
+        sessionStorage.setItem("hptoAdCollapsed", "false");
         adContainer.classList.remove("ad-collapsed");
         adContainer.classList.add("ad-expanded");
         adVideoContainerLeft.classList.remove("ad-left-collapsed");
@@ -328,6 +332,12 @@
         adVideoContainerRight.classList.add("ad-right-expanded");
         adVideoContainerRight.classList.remove("ad-video-container-collapsed");
         adVideoContainerRight.classList.add("ad-video-container-expanded");
+      }
+
+      if (isCollapsed) {
+        collapseAd();
+      } else {
+        expandAd();
       }
 
       function changePauseToReplay() {
@@ -433,17 +443,14 @@
         const options = {
           root: null,
           rootMargin: "0px",
-          threshold: [
-            0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6,
-            0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0,
-          ],
+          threshold: [0, 0.05, 0.5, 0.95, 1],
         };
 
         const handleIntersection = (entries) => {
           entries.forEach((entry) => {
             if (
               entry.intersectionRatio &&
-              entry.intersectionRatio < 0.8 &&
+              entry.intersectionRatio < 0.05 &&
               adContainer.classList.contains("ad-expanded")
             ) {
               collapseAd();
